@@ -1,0 +1,15 @@
+# SnyderLogic — Adaptive Reasoning Core
+
+Lightweight, traceable contradiction-resolution layer for AI agents and research pipelines.
+
+- Detects conflicting facts  
+- Budget-controlled external verification  
+- Full audit trail  
+- Single-file import, no dependencies
+
+```python
+from snyderlogic.core import SnyderLogic
+sl = SnyderLogic()
+print(sl.update("The capital of France is Paris"))
+print(sl.update("The capital of France is Marseille"))
+sl.save()
