@@ -1,0 +1,49 @@
+SLSA_Update(K, p, params)
+# Self-Learning Self-Aligning Update
+# Core epistemic correction loop — December 2025
+
+K       : current coherent knowledge state (single model)
+p       : new proposition candidate
+params  : {ε, B, search_strategy, BKP}
+
+1. Logical intake filter
+   if not Valid(p, K): return K                     # hard reject
+
+2. Find conflicts
+   C ← {q ∈ K | Contradict(p, q)}
+   if C = ∅:
+       K ← K ∪ {p}
+       return K
+
+3. Evidence comparison
+   for each q ∈ C:
+       δ ← E(p, K) − E(q, K)                         # evidence delta
+       if δ > ε:
+           K ← (K \ {q}) ∪ {p}
+           archive_valid_parts(q, K)                 # component salvage
+           return K
+       if δ < −ε:
+           return K                                   # p loses
+
+4. Tie / near-tie → budgeted inquiry
+   budget ← B
+   while budget > 0:
+       s ← params.search_strategy.next_probe()      # can be LLM, web, memory
+       if s = null: break
+       update_evidence_database(s)
+       budget ← budget − cost_of(s)
+       δ ← E(p, K) − E(q, K)                         # re-score
+       if δ > ε:
+           K ← (K \ {q}) ∪ {p}
+           archive_valid_parts(q, K)
+           return K
+       if δ < −ε: return K
+
+5. Budget exhausted → backup policy
+   match params.BKP:
+       "retain"          → return K
+       "random_choice"   → random { K, K∪{p} }
+       "refuse"          → return K
+       custom            → user-defined
+
+Return K
