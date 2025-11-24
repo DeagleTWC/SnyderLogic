@@ -1,9 +1,1 @@
-r = SLSAResonator(inquiry_budget=500, backup_policy="random")
 
-r.update("The capital of France is Paris")
-r.update("The capital of France is Marseille")  # ← will trigger conflict + inquiry
-r.update("Water is wet")
-r.update("2 + 2 = 5")                           # ← will be rejected or challenged
-
-r.challenge_old_beliefs()
-r.save("my_knowledge.json")
